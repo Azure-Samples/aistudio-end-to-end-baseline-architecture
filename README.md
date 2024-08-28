@@ -46,7 +46,7 @@ The Azure AI Studio deployment architecture diagram illustrates how a front-end 
 
 ### Deploying a flow to Azure App Service (alternative)
 
-![Diagram of the deploying a flow to Azure App Service.](docs/media/aistudio-e2e-deployment-appservices.png.png)
+![Diagram of the deploying a flow to Azure App Service.](docs/media/aistudio-e2e-deployment-appservices.png)
 
 The Azure App Service deployment architecture diagram illustrates how the same prompt flow can be containerized and deployed to Azure App Service alongside the same front-end web application from the prior architecture. This solution is a completely self-hosted, externalized alternative to an Azure AI Studio managed online endpoint.
 
