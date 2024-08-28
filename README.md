@@ -184,9 +184,6 @@ To provide AI models with direct access to relevant data, Azure AI Studio allows
 
 1. **Connect to AI Studio Hub**: Access your Azure AI Studio Hub and establish a connection. This is your gateway to leveraging the capabilities provided by Azure AI Studio.
 
-> [!IMPORTANT]  
-> RBAC for AI Search authentication is prefered, for the moment only API Keys authentication seems to work. This document will be updated once this changes.
-
 1. **Create a new AI Search Connection**: Create a new connection using EntraID in the section Connections and select AI Search.
 
 1. **Create a New Project**: Within the AI Studio Hub, initiate a new project which will serve as the container for your AI applications and data.
