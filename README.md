@@ -1,4 +1,4 @@
-# AI Studio end-to-end baseline reference implementation (Work In Progress)
+# AI Studio end-to-end baseline reference implementation
 
 This reference implementation demonstrates how to author and run various AI-driven applications including chat applications, using Azure AI Studio and OpenAI within a single region. It offers a secure and private environment suitable for enterprises, with options for deploying the application:
 
@@ -20,7 +20,9 @@ The implementation seeks to meet stringent enterprise requirements concerning:
 - Scalable architectures
 
 
-## Architecture
+## Reference Architecture
+
+![Diagram of the authoring architecture using Azure AI Studio.](docs/media/ai-studio-authoring.png)
 
 The implementation covers the following scenarios:
 
@@ -29,30 +31,8 @@ The implementation covers the following scenarios:
 1. Deploying a flow to Azure AI Studio (AML hosted option) - The deployment of an executable flow to an Azure AI Studio online endpoint. The client UI that is hosted in Azure App Service accesses the deployed flow.
 1. Deploying a flow to Azure App Service (Self-hosted option) - The deployment of an executable flow as a container to Azure App Service. The client UI that accesses the flow is also hosted in Azure App Service.
 
-### Authoring a flow
 
-![Diagram of the authoring architecture using Azure AI Studio.](docs/media/ai-studio-authoring.png)
-
-The authoring architecture diagram illustrates how flow authors [connect to an Azure AI Studio through a private endpoint](https://learn.microsoft.com/en-us/azure/ai-studio/how-to/configure-private-link?tabs=azure-portal) in a virtual network. In this case, the author connects to the virtual network through Azure Bastion and a virtual machine jumpbox. Connectivity to the virtual network is more commonly done in enterprises through ExpressRoute or virtual network peering.
-
-The diagram further illustrates how Azure AI Studio is configured for [Managed virtual network isolation](https://learn.microsoft.com/en-us/azure/ai-studio/how-to/configure-managed-networkk). With this configuration, a managed virtual network is created, along with managed private endpoints enabling connectivity to private resources such as the workplace Azure Storage and Azure Container Registry. You can also create user-defined connections like private endpoints to connect to resources like Azure OpenAI Service and Azure AI Search (previously named Cognitive Search). Differently from Azure Machine Learning, AI Studio doesn't support bring your own vnet.
-
-### Deploying a flow to Azure AI Studio managed online endpoint
-
-![Diagram of the deploying a flow to Azure AI Studio managed online endpoint.](docs/media/aistudio-e2e-deployment-appservices.png)
-
-
-The Azure AI Studio deployment architecture diagram illustrates how a front-end web application, deployed into a [network-secured App Service](https://github.com/Azure-Samples/app-service-baseline-implementation), [connects to a managed online endpoint through a private endpoint](https://learn.microsoft.com/en-us/azure/ai-studio/how-to/configure-private-link?tabs=azure-portal) in a virtual network. Like the authoring flow, the diagram illustrates how the Azure AI Studio is configured for [Workspace managed virtual network isolation](https://learn.microsoft.com/en-us/azure/ai-studio/how-to/configure-managed-network). The deployed flow is able to connect to required resources such as Azure OpenAI and AI Search through managed private endpoints.
-
-### Deploying a flow to Azure App Service (alternative)
-
-![Diagram of the deploying a flow to Azure App Service.](docs/media/aistudio-e2e-deployment-appservices.png)
-
-The Azure App Service deployment architecture diagram illustrates how the same prompt flow can be containerized and deployed to Azure App Service alongside the same front-end web application from the prior architecture. This solution is a completely self-hosted, externalized alternative to an Azure AI Studio managed online endpoint.
-
-The flow is still authored in a network-isolated Azure AI Studio. To deploy in App Service in this architecture, the flows need to be containerized and pushed to the Azure Container Registry that is accessible through private endpoints to the App Service.
-
-## Deploy
+## Deployment
 
 The following are prerequisites.
 
@@ -162,8 +142,11 @@ Make sure that after deployment you go to your AI Search resource and approve th
 ![Private Shared Link](/docs/media/aisearch-shared-private-links.png)
 
 
-### Leveraging AI Studio Playground to Interact with Your Indexed Data
+## Project Playground
 
+AI Studio Project Playground serves as a streamlined arena where users can interact with different AI technologies. The platform offers a Chat Playground where you can test conversational features of Azure OpenAI and chat with your own data,. In addition, the Assistants section allows to use file search, code interpreter for sandboxed code generation and execution and functions. The platform also includes a feature for creating Images, as well as a section devoted to generating Completions, helping to round out creative or complex texts. Overall, this playground is a one-stop shop for crafting, assessing, and perfecting your AI-driven projects.
+
+### Chat with your Data
 
 ![AISTUDIPLayground](/docs/media/aistudio-playground.png)
 
@@ -173,8 +156,6 @@ Make sure that after deployment you go to your AI Search resource and approve th
 Once your data is indexed, you can readily test its integration with LLMs through the AI Studio Playground. This interactive space provides a user-friendly interface to run queries against your data, observe how the LLM utilizes the indexed information, and refine the interaction experience. Here's how you can leverage the AI Studio Playground with your indexed datasets:
 
 To provide AI models with direct access to relevant data, Azure AI Studio allows you to index your own datasets. This will enable more sophisticated queries and generate richer, context-aware interactions. Follow the steps below to index your data within Azure AI Studio and put it to work using the AI models and Playground.
-
-
 
 #### Step-by-Step Process
 
@@ -199,7 +180,37 @@ To provide AI models with direct access to relevant data, Azure AI Studio allows
 
 By indexing your own data, you turn the Playground into a powerful tool not just for testing generic AI capabilities but for validating and improving your specific AI-driven applications. The integrated environment of Azure AI Studio simplifies this process, allowing you to focus on crafting the most engaging and intelligent experiences based on your unique datasets.
 
+## Assistants
 
+![Asssistants](/docs/media/ai-studio-assistants.png)
+
+Azure OpenAI Assistants (Preview) allows you to create AI assistants tailored to your needs through custom instructions and augmented by advanced tools like code interpreter, and custom functions.
+
+You can test this feature by clicking assistants where you can use the tools provided such as File Search, Code Interpreter and Custom Functions.
+
+
+## Promptflow
+
+### Authoring a flow
+
+The authoring architecture diagram illustrates how flow authors [connect to an Azure AI Studio through a private endpoint](https://learn.microsoft.com/en-us/azure/ai-studio/how-to/configure-private-link?tabs=azure-portal) in a virtual network. In this case, the author connects to the virtual network through Azure Bastion and a virtual machine jumpbox. Connectivity to the virtual network is more commonly done in enterprises through ExpressRoute or virtual network peering.
+
+The diagram further illustrates how Azure AI Studio is configured for [Managed virtual network isolation](https://learn.microsoft.com/en-us/azure/ai-studio/how-to/configure-managed-networkk). With this configuration, a managed virtual network is created, along with managed private endpoints enabling connectivity to private resources such as the workplace Azure Storage and Azure Container Registry. You can also create user-defined connections like private endpoints to connect to resources like Azure OpenAI Service and Azure AI Search (previously named Cognitive Search). Differently from Azure Machine Learning, AI Studio doesn't support bring your own vnet.
+
+### Deploying a flow to Azure AI Studio managed online endpoint
+
+![Diagram of the deploying a flow to Azure AI Studio managed online endpoint.](docs/media/aistudio-e2e-deployment-appservices.png)
+
+
+The Azure AI Studio deployment architecture diagram illustrates how a front-end web application, deployed into a [network-secured App Service](https://github.com/Azure-Samples/app-service-baseline-implementation), [connects to a managed online endpoint through a private endpoint](https://learn.microsoft.com/en-us/azure/ai-studio/how-to/configure-private-link?tabs=azure-portal) in a virtual network. Like the authoring flow, the diagram illustrates how the Azure AI Studio is configured for [Workspace managed virtual network isolation](https://learn.microsoft.com/en-us/azure/ai-studio/how-to/configure-managed-network). The deployed flow is able to connect to required resources such as Azure OpenAI and AI Search through managed private endpoints.
+
+### Deploying a flow to Azure App Service (alternative)
+
+![Diagram of the deploying a flow to Azure App Service.](docs/media/aistudio-e2e-deployment-appservices.png)
+
+The Azure App Service deployment architecture diagram illustrates how the same prompt flow can be containerized and deployed to Azure App Service alongside the same front-end web application from the prior architecture. This solution is a completely self-hosted, externalized alternative to an Azure AI Studio managed online endpoint.
+
+The flow is still authored in a network-isolated Azure AI Studio. To deploy in App Service in this architecture, the flows need to be containerized and pushed to the Azure Container Registry that is accessible through private endpoints to the App Service.
 
 ### Create, test, and deploy a Prompt flow
 
