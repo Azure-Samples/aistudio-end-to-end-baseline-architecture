@@ -13,12 +13,11 @@ Leveraging the scalable features of [Promptflow](https://microsoft.github.io/pro
 - Custom Python scripts
 - Large Language Models (LLMs) integration
 
-The implementation seeks to meet stringent enterprise requirements concerning:
+The implementation seeks to meet  enterprise requirements concerning:
 
-- Network confinement
-- Comprehensive security
-- Scalable architectures
-
+- Secure Network Perimeter
+- Identity Management
+- Scalability
 
 ## Reference Architecture
 
