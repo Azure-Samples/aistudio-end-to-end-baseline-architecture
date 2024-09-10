@@ -16,6 +16,7 @@ var cognitiveServicesOpenAIContributorRoleId = 'a001fd3d-188f-4b5d-821b-7da978bf
 var cognitiveServicesOpenAIUserRoleId = '5e0bd9bd-7b93-4f28-af87-19fc36ad61bd'
 var contributorRoleId = 'b24988ac-6180-42a0-ab88-20f7382dd24c' // ID for the built-in Contributor role
 var cognitiveServicesUserRoleID = 'a97b65f3-24c7-4388-baec-2e87135dc908' // Placeholder ID for the Cognitive Services User role
+var keyVaultAdministrator = '00482a5a-887f-4fb3-b363-3b7fe8e74483'
 
 // Existing resources for scoping role assignments
 resource existingStorageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' existing = {
@@ -203,17 +204,17 @@ resource roleAssignmentStorageUserFileDataPrivilegedContributor 'Microsoft.Autho
   scope: existingStorageAccount
 }
 
-/*var keyVaultAdministratorRoleId = 'ROLE_DEFINITION_ID'
+
 
 resource roleAssignmentKeyVaultAdministrator 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(resourceGroupId, keyVaultAdministratorRoleId, aiServicesPrincipalId)
+  name: guid(resourceGroupId, keyVaultAdministrator, aiServicesPrincipalId)
   properties: {
     principalId: aiServicesPrincipalId
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', keyVaultAdministratorRoleId)
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', keyVaultAdministrator)
   }
   // Update the scope to the specific Key Vault resource if needed
-  scope: resourceId('Microsoft.KeyVault/vaults', 'YOUR_KEYVAULT_NAME')
-}*/
+  scope:  resourceGroup()
+}
 
 var userAccessAdministratorRoleId = '18d7d88d-d35e-4fb5-a5c3-7773c20a72d9'
 
@@ -225,6 +226,8 @@ resource roleAssignmentUserAccessAdministrator 'Microsoft.Authorization/roleAssi
   }
   scope: resourceGroup()
 }
+
+
 
 
 

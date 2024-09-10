@@ -50,7 +50,7 @@ resource appDeployStorage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
     allowCrossTenantReplication: false
     encryption: {
       keySource: 'Microsoft.Storage'
-      requireInfrastructureEncryption: false
+      requireInfrastructureEncryption: true
       
       services: {
         blob: {
@@ -142,7 +142,7 @@ resource mlStorage 'Microsoft.Storage/storageAccounts@2023-01-01' = {
     allowCrossTenantReplication: false
     encryption: {
       keySource: 'Microsoft.Storage'
-      requireInfrastructureEncryption: false
+      requireInfrastructureEncryption: true
       services: {
         blob: {
           enabled: true
