@@ -13,12 +13,11 @@ Leveraging the scalable features of [Promptflow](https://microsoft.github.io/pro
 - Custom Python scripts
 - Large Language Models (LLMs) integration
 
-The implementation seeks to meet stringent enterprise requirements concerning:
+The implementation seeks to meet  enterprise requirements concerning:
 
-- Network confinement
-- Comprehensive security
-- Scalable architectures
-
+- Secure Network Perimeter
+- Identity Management
+- Scalability
 
 ## Reference Architecture
 
@@ -113,7 +112,7 @@ az account set --subscription xxxxx
 }
 ```
 
-- userObjectId: Referes to the identity that will make use of AI Studio (your current user on the Azure Portal)
+- userObjectId: Referes to the identity that will make use of AI Studio (your current user on the Azure Portal) You can use the following command in cloud shell: az ad signed-in-user show --query id -o tsv
 - deploySharedPrivateLink: true by default, in a second deployment you might have some errors because Shared Private Link cannot be updated, you can either erase them or change this to false.
 
 1. Run the following command to create a resource group and deploy the infrastructure. Make sure:
