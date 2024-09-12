@@ -1,6 +1,6 @@
 # AI Studio end-to-end baseline reference implementation
 
-This reference implementation demonstrates how to author and run various AI-driven applications including chat applications, using Azure AI Studio and OpenAI within a single region. It offers a secure and private environment suitable for enterprises, with options for deploying the application:
+This reference implementation based on our [Baseline OpenAI end-to-end chat reference architecture](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/architecture/baseline-openai-e2e-chat) demonstrates how to author and run various AI-driven applications including chat applications, using Azure AI Studio and OpenAI within a single region. It offers a secure and private environment suitable for enterprises, with options for deploying the application:
 
 - An Azure AI Studio-managed online endpoint in a managed virtual network.
   - For applications demanding high availability, deploying multiple online endpoints behind a load balancer to enhance resiliency is advisable.
