@@ -20,6 +20,17 @@ param aiServiceSkuName string = 'S0'
 @description('Disable local authentication')
 param disableLocalAuth bool = false
 
+@description('Specifies the OpenAI deployments to create.')
+param deployments array = [
+  {
+    name: 'gpt-4'
+    version: '1106-Preview'
+    raiPolicyName: ''
+    capacity: 10
+    sku: 'Standard'
+  }
+]
+
 var aiServiceNameCleaned = replace(aiServiceName, '-', '')
 
 var cognitiveServicesPrivateDnsZoneName = 'privatelink.cognitiveservices.azure.com'
@@ -64,6 +75,27 @@ resource aiServices 'Microsoft.CognitiveServices/accounts@2024-04-01-preview' = 
     type: 'SystemAssigned'
   }
 }
+
+resource model 'Microsoft.CognitiveServices/accounts/deployments@2024-06-01-preview' = [
+  for deployment in deployments: {
+    name: deployment.name
+    parent: aiServices
+    sku: {
+      name: deployment.sku
+      capacity: deployment.capacity
+    }
+
+    properties: {
+      model: {
+        format: 'OpenAI'
+        name: deployment.name
+        version: deployment.version
+      }
+      raiPolicyName: deployment.raiPolicyName
+      versionUpgradeOption: 'OnceNewDefaultVersionAvailable'
+    }
+  }
+]
 
 resource aiServicesPrivateEndpoint 'Microsoft.Network/privateEndpoints@2023-11-01' = {
   name: aiServicesPleName

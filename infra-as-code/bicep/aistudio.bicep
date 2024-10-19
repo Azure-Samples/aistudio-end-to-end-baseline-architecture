@@ -15,9 +15,9 @@ param applicationInsightsName string
 param containerRegistryName string
 param keyVaultName string
 param mlStorageAccountName string
-param logWorkspaceName string
 param openAiResourceName string
 param searchServiceName string
+param cognitiveAccountName string // Added parameter for cognitive account
 
 // ---- Variables ----
 var workspaceName = 'mlw-${baseName}'
@@ -31,7 +31,6 @@ resource vnet 'Microsoft.Network/virtualNetworks@2023-05-01' existing = {
     name: privateEndpointsSubnetName
   }
 }
-
 
 resource applicationInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: applicationInsightsName
@@ -57,6 +56,9 @@ resource searchService 'Microsoft.Search/searchServices@2021-04-01-preview' exis
   name: searchServiceName
 }
 
+resource cognitiveAccount 'Microsoft.CognitiveServices/accounts@2024-04-01-preview' existing = { // Added resource for cognitive account
+  name: cognitiveAccountName
+}
 
 @description('Built-in Role: [AcrPull](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#acrpull)')
 resource containerRegistryPullRole 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
@@ -69,8 +71,6 @@ resource containerRegistryPushRole 'Microsoft.Authorization/roleDefinitions@2022
   name: '8311e382-0749-4cb8-b61a-304f252e45ec'
   scope: subscription()
 }
-
-
 
 // ---- Machine Learning Workspace assets ----
 
@@ -117,6 +117,17 @@ resource aiStudioHub 'Microsoft.MachineLearningServices/workspaces@2024-07-01-pr
             sparkStatus: 'Inactive'
           }
         }
+
+        aiservices: {
+          type: 'PrivateEndpoint'
+          destination: {
+            serviceResourceId: cognitiveAccount.id // Updated to use cognitive account
+            subresourceTarget: 'account'
+            sparkEnabled: false
+            sparkStatus: 'Inactive'
+          }
+        }
+      
       }
     }
   }
@@ -214,7 +225,6 @@ resource notebookPrivateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' =
   }
 }
 
-
 // AMLW -> Azure Container Registry data plane (push and pull)
 
 @description('Assign AML Workspace\'s ID: AcrPush to workload\'s container registry.')
@@ -238,4 +248,5 @@ resource computeInstanceContainerRegistryPullRoleAssignment 'Microsoft.Authoriza
     principalId: aiStudioHub.identity.principalId
   }
 }
+
 output machineLearningId string = aiStudioHub.id

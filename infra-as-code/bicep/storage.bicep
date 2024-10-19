@@ -17,7 +17,7 @@ param logWorkspaceName string
 // variables
 var appDeployStorageName = 'st${baseName}'
 var appDeployStoragePrivateEndpointName = 'pep-${appDeployStorageName}'
-
+param virtualNetworkExternalId string
 var mlStorageName = 'stml${baseName}'
 var mlBlobStoragePrivateEndpointName = 'pep-blob-${mlStorageName}'
 var mlFileStoragePrivateEndpointName = 'pep-file-${mlStorageName}'
@@ -51,7 +51,7 @@ resource appDeployStorage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
     encryption: {
       keySource: 'Microsoft.Storage'
       requireInfrastructureEncryption: true
-      
+
       services: {
         blob: {
           enabled: true
@@ -70,7 +70,6 @@ resource appDeployStorage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
       virtualNetworkRules: []
       ipRules: []
       defaultAction: 'Deny'
-
     }
     supportsHttpsTrafficOnly: true
   }
@@ -156,7 +155,16 @@ resource mlStorage 'Microsoft.Storage/storageAccounts@2023-01-01' = {
     }
     minimumTlsVersion: 'TLS1_2'
     networkAcls: {
+      resourceAccessRules: []
       bypass: 'AzureServices'
+      virtualNetworkRules: [
+        {
+          id: '${virtualNetworkExternalId}/subnets/snet-privateEndpoints'
+          action: 'Allow'
+          state: 'Succeeded'
+        }
+      ]
+      ipRules: []
       defaultAction: 'Deny'
     }
     supportsHttpsTrafficOnly: true
