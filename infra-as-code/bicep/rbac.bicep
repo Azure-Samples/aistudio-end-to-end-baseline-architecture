@@ -89,7 +89,7 @@ resource roleAssignmentStorageBlobDataContributor 'Microsoft.Authorization/roleA
 resource roleAssignmentCognitiveServicesOpenAIContributor 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   name: guid(existingAiOpenAIChat.id, cognitiveServicesOpenAIContributorRoleId, aiServicesPrincipalId)
   properties: {
-    principalId: aiServicesPrincipalId
+    principalId: existingAiSearch.identity.principalId
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', cognitiveServicesOpenAIContributorRoleId)
   }
   scope: existingAiOpenAIChat
@@ -131,15 +131,6 @@ resource userRoleAssignmentContributorAiServices 'Microsoft.Authorization/roleAs
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', contributorRoleId)
   }
   scope: existingAiOpenAIChat // Example scope, adjust as needed
-}
-
-resource userRoleAssignmentContributorAISearch 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(existingAiSearch.id, contributorRoleId, userObjectId)
-  properties: {
-    principalId: userObjectId
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', contributorRoleId)
-  }
-  scope: existingAiSearch // Example scope, adjust as needed
 }
 
 resource userRoleAssignmentContributorAiSearch 'Microsoft.Authorization/roleAssignments@2022-04-01' = {

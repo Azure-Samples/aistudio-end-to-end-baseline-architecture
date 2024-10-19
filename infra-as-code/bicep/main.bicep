@@ -78,6 +78,8 @@ module storageModule 'storage.bicep' = {
     vnetName: networkModule.outputs.vnetNName
     privateEndpointsSubnetName: networkModule.outputs.privateEndpointsSubnetName
     logWorkspaceName: logWorkspace.name
+    virtualNetworkExternalId: networkModule.outputs.vnetId
+    
   }
 }
 
@@ -136,9 +138,9 @@ module openaiModule 'openai.bicep' = {
 module aiServices 'aiservices.bicep' = {
   name: 'aiServicesDeploy'
   params: {
+    aiServicesPleName: 'aiServicesPle${baseName}'
     location: location
     aiServiceName: 'ai${baseName}'
-    aiServicesPleName: 'aiservicesple'
     vnetName: networkModule.outputs.vnetNName
     privateEndpointsSubnetName: networkModule.outputs.privateEndpointsSubnetName
     
@@ -154,10 +156,9 @@ module aiStudioModule 'aistudio.bicep' = {
     location: location
     baseName: baseName
     vnetName: networkModule.outputs.vnetNName
-    privateEndpointsSubnetName: networkModule.outputs.privateEndpointsSubnetName
-    logWorkspaceName: logWorkspace.name
+    privateEndpointsSubnetName: networkModule.outputs.privateEndpointsSubnetName    
     searchServiceName: aiSearchModule.outputs.name
-    
+    cognitiveAccountName: aiServices.outputs.name
     aiHubDescription: 'AI Hub Description'
     aiHubLocation: location
     aiHubTags: {
@@ -222,6 +223,7 @@ module aiSearchModule 'search.bicep' = {
     privateEndpointsSubnetName: networkModule.outputs.privateEndpointsSubnetName
     sharedPrivateLinks: sharedPrivateLinkResources
     deploySharedPrivateLink:  deploySharedPrivateLink
+    
     sku: {
       name: 'standard2'
     }
@@ -278,4 +280,18 @@ module rbacModule 'rbac.bicep' = {
     aiOpenAIEmbeddingName: aiServices.outputs.name
     aiServicesPrincipalId: aiServices.outputs.aiServicesPrincipalId
   }
+}
+
+
+module networkAclUpdate 'networkAclUpdate.bicep' = {
+  name: 'networkAclUpdateDeployment'
+  params: {
+    storageAccountName: storageModule.outputs.mlDeployStorageName
+    mlWorkspaceResourceId: aiStudioModule.outputs.aiStudioHubId
+    location: location
+  }
+  dependsOn: [
+    rbacModule
+    aiStudioModule
+  ]
 }

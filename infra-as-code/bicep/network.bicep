@@ -646,6 +646,9 @@ resource jumpboxSubnetNsg 'Microsoft.Network/networkSecurityGroups@2022-11-01' =
 @description('The name of the vnet.')
 output vnetNName string = vnet.name
 
+@description('The name of the vnet.')
+output vnetId string = vnet.id
+
 @description('The name of the app service plan subnet.')
 output appServicesSubnetName string = vnet::appServiceSubnet.name
 
